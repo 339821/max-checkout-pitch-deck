@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Step 4: Payment Experience</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Decorative Background Elements */
+        .decorative-blob {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 0;
+            filter: blur(60px);
+        }
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background-color: rgba(0, 102, 255, 0.04);
+            top: -100px;
+            right: -50px;
+        }
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background-color: rgba(16, 185, 129, 0.03); /* green hint for money/payment */
+            bottom: -50px;
+            left: -50px;
+        }
+
+        /* Feature List Styling */
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            position: relative;
+        }
+        .feature-icon-wrapper {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background-color: #eff6ff; /* blue-50 */
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0066FF;
+            margin-right: 20px;
+            font-size: 20px;
+        }
+        .feature-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 4px 0;
+        }
+        .feature-content p {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Phone Mockup Styling */
+        .phone-mockup {
+            width: 320px;
+            height: 640px;
+            background: #ffffff;
+            border-radius: 40px;
+            border: 12px solid #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            z-index: 10;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #1a1a1a;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 20;
+        }
+        .phone-screen {
+            height: 100%;
+            background: #f3f4f6; /* Light gray background for payment list */
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* UI Elements within Phone */
+        .ui-status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1f2937;
+            background: white;
+            padding-top: 10px;
+        }
+        .ui-nav-bar {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            gap: 16px;
+        }
+        .ui-content {
+            padding: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .payment-summary {
+            background: white;
+            padding: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .payment-section-title {
+            padding: 12px 20px 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .payment-option {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .payment-option:last-child {
+            border-bottom: none;
+        }
+        
+        .pay-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: #374151;
+            font-size: 18px;
+        }
+        
+        .radio-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            margin-left: auto;
+            position: relative;
+        }
+        .radio-selected {
+            border-color: #0066FF;
+        }
+        .radio-selected::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #0066FF;
+            border-radius: 50%;
+        }
+        
+        .offer-tag {
+            font-size: 10px;
+            font-weight: 700;
+            color: #059669;
+            background: #D1FAE5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+
+        .ui-footer {
+            background: white;
+            padding: 16px 20px;
+            border-top: 1px solid #e5e7eb;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .ui-btn-primary {
+            background-color: #0066FF;
+            color: white;
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 102, 255, 0.2);
+        }
+
+        /* Floating Badge */
+        .floating-badge {
+            position: absolute;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 20;
+            border: 1px solid #f3f4f6;
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Blobs -->
+<div class="decorative-blob blob-1"></div>
+<div class="decorative-blob blob-2"></div>
+<!-- Main Content -->
+<div class="relative z-10 flex flex-1 w-full h-full p-16">
+<!-- Left Column: Text Content -->
+<div class="w-1/2 flex flex-col justify-center pr-12">
+<div class="mb-4">
+<span class="text-blue-600 font-bold tracking-widest text-sm uppercase">Step 04</span>
+</div>
+<h2 class="text-5xl font-bold text-gray-900 leading-tight mb-6">
+                Payment Experience
+            </h2>
+<p class="text-xl text-gray-500 mb-12 max-w-lg">
+                A flexible, intelligent payment stack designed to minimize failure and maximize trust.
+            </p>
+<!-- Feature List -->
+<div class="space-y-4">
+<!-- Feature 1 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-qrcode"></i>
+</div>
+<div class="feature-content">
+<h3>UPI-First Design</h3>
+<p>Seamless integration for instant transactions. Positioned as the default for highest success rates.</p>
+</div>
+</div>
+<!-- Feature 2 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-wallet"></i>
+</div>
+<div class="feature-content">
+<h3>In-house Wallet</h3>
+<p>Integrated loyalty wallet for one-tap payments, perfect for frequent repeat customers.</p>
+</div>
+</div>
+<!-- Feature 3 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-credit-card"></i>
+</div>
+<div class="feature-content">
+<h3>Full Payment Suite</h3>
+<p>Native support for saved cards, net banking, and EMI options without redirect friction.</p>
+</div>
+</div>
+<!-- Feature 4 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-money-bill-wave"></i>
+</div>
+<div class="feature-content">
+<h3>Unlimited COD</h3>
+<p>Cash on Delivery available without cap restrictions to build trust with new users.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Mockup -->
+<div class="w-1/2 flex items-center justify-center relative">
+<!-- Phone Mockup -->
+<div class="phone-mockup">
+<div class="phone-notch"></div>
+<div class="phone-screen">
+<!-- Status Bar -->
+<div class="ui-status-bar">
+<span>9:42</span>
+<div class="flex gap-1">
+<i class="fas fa-signal"></i>
+<i class="fas fa-wifi"></i>
+<i class="fas fa-battery-full"></i>
+</div>
+</div>
+<!-- Nav Bar -->
+<div class="ui-nav-bar">
+<i class="fas fa-arrow-left text-gray-700 text-lg"></i>
+<span class="font-bold text-gray-900 text-lg">Select Payment</span>
+</div>
+<!-- Main Content (Scrollable) -->
+<div class="ui-content">
+<!-- Payment Summary -->
+<div class="payment-summary">
+<div class="flex justify-between items-center mb-1">
+<span class="text-gray-500 font-medium">Total Amount</span>
+<span class="text-gray-900 font-bold text-xl">$154.50</span>
+</div>
+<div class="flex justify-between items-center text-xs text-green-600">
+<span class="flex items-center gap-1"><i class="fas fa-check-circle"></i> Best coupon applied</span>
+<span>You save $25.00</span>
+</div>
+</div>
+<!-- Recommended Section -->
+<div class="payment-section-title">Recommended</div>
+<div class="bg-white">
+<div class="payment-option">
+<div class="pay-icon text-green-600 border-green-100 bg-green-50">
+<i class="fas fa-bolt"></i>
+</div>
+<div class="flex-1">
+<div class="flex items-center">
+<p class="font-bold text-gray-900 text-sm">UPI / GPay</p>
+<span class="offer-tag">Fastest</span>
+</div>
+<p class="text-xs text-gray-500 mt-0.5">Pay via installed UPI apps</p>
+</div>
+<div class="radio-circle radio-selected"></div>
+</div>
+</div>
+<!-- Other Options -->
+<div class="payment-section-title mt-4">Other Payment Methods</div>
+<div class="bg-white">
+<!-- Wallet -->
+<div class="payment-option">
+<div class="pay-icon text-blue-600">
+<i class="fas fa-wallet"></i>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-gray-900 text-sm">Kortnik Wallet</p>
+<p class="text-xs text-gray-500 mt-0.5">Balance: $0.00</p>
+</div>
+<div class="radio-circle"></div>
+</div>
+<!-- Card -->
+<div class="payment-option">
+<div class="pay-icon text-gray-700">
+<i class="fas fa-credit-card"></i>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-gray-900 text-sm">Credit / Debit Card</p>
+<p class="text-xs text-gray-500 mt-0.5">Visa, Mastercard, Amex</p>
+</div>
+<div class="radio-circle"></div>
+</div>
+<!-- COD -->
+<div class="payment-option">
+<div class="pay-icon text-green-700">
+<i class="fas fa-money-bill"></i>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-gray-900 text-sm">Cash on Delivery</p>
+<p class="text-xs text-gray-500 mt-0.5">Pay in cash at doorstep</p>
+</div>
+<div class="radio-circle"></div>
+</div>
+</div>
+<!-- Padding for scroll -->
+<div class="h-8"></div>
+</div>
+<!-- Footer CTA -->
+<div class="ui-footer">
+<button class="ui-btn-primary">
+<span class="mr-2">Pay $154.50</span>
+<i class="fas fa-arrow-right text-sm"></i>
+</button>
+<div class="flex justify-center items-center mt-3 gap-2 text-gray-400">
+<i class="fas fa-lock text-xs"></i>
+<span class="text-[10px] uppercase font-bold tracking-wider">100% Secure Payments</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Badge -->
+<div class="floating-badge" style="top: 30%; right: 5%;">
+<div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+<i class="fas fa-chart-line"></i>
+</div>
+<div>
+<p class="text-xs text-gray-400 font-bold uppercase">Success Rate</p>
+<p class="text-sm font-bold text-gray-900">98% with UPI</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

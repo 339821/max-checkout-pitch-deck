@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Step 2: OTP Verification</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Decorative Background Elements */
+        .decorative-blob {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 0;
+            filter: blur(60px);
+        }
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background-color: rgba(0, 102, 255, 0.04);
+            top: -100px;
+            right: -50px;
+        }
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background-color: rgba(239, 68, 68, 0.03); /* faint red hint */
+            bottom: -50px;
+            left: -50px;
+        }
+
+        /* Feature List Styling */
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .feature-icon-wrapper {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background-color: #eff6ff; /* blue-50 */
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0066FF;
+            margin-right: 20px;
+            font-size: 20px;
+        }
+        .feature-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 4px 0;
+        }
+        .feature-content p {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Phone Mockup Styling */
+        .phone-mockup {
+            width: 320px;
+            height: 640px;
+            background: #ffffff;
+            border-radius: 40px;
+            border: 12px solid #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            z-index: 10;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #1a1a1a;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 20;
+        }
+        .phone-screen {
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* UI Elements within Phone */
+        .ui-status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1f2937;
+            padding-top: 10px;
+        }
+        .ui-nav-bar {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+        .ui-brand-header {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 20px;
+        }
+        .ui-brand-logo {
+            font-weight: 800;
+            color: #0066FF;
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+        .ui-content {
+            padding: 10px 24px 24px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .otp-instruction {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .otp-inputs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .otp-box {
+            width: 50px;
+            height: 60px;
+            border: 1px solid #D1D5DB;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+            background: #F9FAFB;
+        }
+        .otp-box.active {
+            border: 2px solid #0066FF;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
+        }
+        .otp-box.filled {
+            border-color: #0066FF;
+            background: #EFF6FF;
+            color: #0066FF;
+        }
+        .ui-btn-primary {
+            background-color: #0066FF;
+            color: white;
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 102, 255, 0.2);
+            margin-top: auto;
+            margin-bottom: 12px;
+        }
+        .resend-link {
+            text-align: center;
+            font-size: 14px;
+            color: #6B7280;
+            margin-top: 16px;
+        }
+        .resend-link span {
+            color: #0066FF;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Simulated Keyboard */
+        .ui-keyboard {
+            background: #D1D5DB;
+            padding: 6px 6px 20px 6px;
+        }
+        .kb-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 6px;
+            gap: 6px;
+        }
+        .kb-key {
+            width: 31%;
+            height: 42px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 0 #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 400;
+            color: #000;
+        }
+        .kb-key:active {
+            background-color: #e5e5e5;
+        }
+        .kb-key-empty {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        /* Floating Badge */
+        .floating-badge {
+            position: absolute;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 20;
+            border: 1px solid #f3f4f6;
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Blobs -->
+<div class="decorative-blob blob-1"></div>
+<div class="decorative-blob blob-2"></div>
+<!-- Main Content -->
+<div class="relative z-10 flex flex-1 w-full h-full p-16">
+<!-- Left Column: Text Content -->
+<div class="w-1/2 flex flex-col justify-center pr-12">
+<div class="mb-4">
+<span class="text-gray-400 font-bold tracking-widest text-sm uppercase">Step 02</span>
+</div>
+<h2 class="text-5xl font-bold text-gray-900 leading-tight mb-6">
+                OTP Verification
+            </h2>
+<p class="text-xl text-gray-500 mb-12 max-w-lg">
+                Secure validation that feels instantaneous, reducing anxiety and wait times.
+            </p>
+<!-- Feature List -->
+<div class="space-y-4">
+<!-- Feature 1 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-shield-alt"></i>
+</div>
+<div class="feature-content">
+<h3>4-Digit Security</h3>
+<p>Optimized for cognitive ease and speed. Easier to remember and faster to type than 6 digits.</p>
+</div>
+</div>
+<!-- Feature 2 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-check-circle"></i>
+</div>
+<div class="feature-content">
+<h3>Brand Trust</h3>
+<p>Prominent branding ensures users feel secure that they are validating with the correct merchant.</p>
+</div>
+</div>
+<!-- Feature 3 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-redo"></i>
+</div>
+<div class="feature-content">
+<h3>Smart Recovery</h3>
+<p>Clear resend options with countdown timers and alternate methods like WhatsApp backup.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Mockup -->
+<div class="w-1/2 flex items-center justify-center relative">
+<!-- Phone Mockup -->
+<div class="phone-mockup">
+<div class="phone-notch"></div>
+<div class="phone-screen">
+<!-- Status Bar -->
+<div class="ui-status-bar">
+<span>9:42</span>
+<div class="flex gap-1">
+<i class="fas fa-signal"></i>
+<i class="fas fa-wifi"></i>
+<i class="fas fa-battery-full"></i>
+</div>
+</div>
+<!-- Nav Bar -->
+<div class="ui-nav-bar">
+<i class="fas fa-arrow-left text-gray-400 text-lg"></i>
+</div>
+<!-- Brand Header -->
+<div class="ui-brand-header">
+<div class="ui-brand-logo">QUICK<span class="text-gray-800">SHOP</span></div>
+</div>
+<!-- Main Content -->
+<div class="ui-content">
+<h1 class="text-2xl font-bold text-gray-900 mb-2 text-center">Verify Identity</h1>
+<div class="otp-instruction">
+<p class="text-sm text-gray-500">
+                                    We've sent a code to <span class="font-bold text-gray-900">+1 (555) 867-53</span>
+<a class="text-blue-600 ml-1 font-medium" href="#">Edit</a>
+</p>
+</div>
+<!-- OTP Input -->
+<div class="otp-inputs">
+<div class="otp-box filled">8</div>
+<div class="otp-box filled">2</div>
+<div class="otp-box active">
+<div class="h-6 w-0.5 bg-blue-600 animate-pulse"></div>
+</div>
+<div class="otp-box"></div>
+</div>
+<div class="resend-link mb-8">
+<p>Resend code in <span class="text-gray-400">00:24</span></p>
+</div>
+<!-- CTA Button -->
+<button class="ui-btn-primary">
+                                Verify &amp; Proceed
+                            </button>
+<div class="text-center mt-4">
+<p class="text-xs text-gray-400">
+                                    Trusted &amp; Secure by <i class="fas fa-lock ml-1"></i> VeriSign
+                                </p>
+</div>
+</div>
+<!-- Keyboard -->
+<div class="ui-keyboard">
+<div class="kb-row">
+<div class="kb-key">1</div>
+<div class="kb-key">2</div>
+<div class="kb-key">3</div>
+</div>
+<div class="kb-row">
+<div class="kb-key">4</div>
+<div class="kb-key">5</div>
+<div class="kb-key">6</div>
+</div>
+<div class="kb-row">
+<div class="kb-key">7</div>
+<div class="kb-key">8</div>
+<div class="kb-key">9</div>
+</div>
+<div class="kb-row">
+<div class="kb-key kb-key-empty"></div>
+<div class="kb-key">0</div>
+<div class="kb-key kb-key-empty"><i class="fas fa-backspace"></i></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Badge -->
+<div class="floating-badge" style="top: 30%; right: 10%;">
+<div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+<i class="fas fa-paste"></i>
+</div>
+<div>
+<p class="text-xs text-gray-400 font-bold uppercase">Smart Feature</p>
+<p class="text-sm font-bold text-gray-900">Auto-Paste</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Step 1: Login Flow</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Decorative Background Elements */
+        .decorative-blob {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 0;
+            filter: blur(60px);
+        }
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background-color: rgba(0, 102, 255, 0.04);
+            top: -100px;
+            right: -50px;
+        }
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background-color: rgba(239, 68, 68, 0.03); /* faint red hint */
+            bottom: -50px;
+            left: -50px;
+        }
+
+        /* Feature List Styling */
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .feature-icon-wrapper {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background-color: #eff6ff; /* blue-50 */
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0066FF;
+            margin-right: 20px;
+            font-size: 20px;
+        }
+        .feature-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 4px 0;
+        }
+        .feature-content p {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Phone Mockup Styling */
+        .phone-mockup {
+            width: 320px;
+            height: 640px;
+            background: #ffffff;
+            border-radius: 40px;
+            border: 12px solid #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            z-index: 10;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #1a1a1a;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 20;
+        }
+        .phone-screen {
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* UI Elements within Phone */
+        .ui-status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1f2937;
+            padding-top: 10px;
+        }
+        .ui-nav-bar {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+        .ui-banner {
+            background-color: #FEF3C7;
+            color: #92400E;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ui-content {
+            padding: 24px 20px;
+            flex: 1;
+        }
+        .ui-input-group {
+            margin-top: 24px;
+        }
+        .ui-input-box {
+            display: flex;
+            border: 1px solid #0066FF; /* Active state */
+            border-radius: 8px;
+            overflow: hidden;
+            height: 50px;
+            background: #F9FAFB;
+        }
+        .ui-country-code {
+            background: #EFF6FF;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: #1f2937;
+            border-right: 1px solid #E5E7EB;
+            font-size: 14px;
+        }
+        .ui-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #111827;
+        }
+        .ui-cursor {
+            width: 2px;
+            height: 20px;
+            background-color: #0066FF;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .ui-btn-primary {
+            background-color: #0066FF;
+            color: white;
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 102, 255, 0.2);
+        }
+        .ui-divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            color: #9CA3AF;
+            font-size: 12px;
+        }
+        .ui-divider::before, .ui-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: #E5E7EB;
+        }
+        .ui-divider span {
+            padding: 0 10px;
+        }
+        .ui-social-row {
+            display: flex;
+            gap: 12px;
+        }
+        .ui-social-btn {
+            flex: 1;
+            height: 44px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            background: white;
+        }
+        
+        /* Simulated Keyboard */
+        .ui-keyboard {
+            background: #D1D5DB;
+            padding: 6px 6px 20px 6px;
+        }
+        .kb-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 6px;
+            gap: 6px;
+        }
+        .kb-key {
+            width: 31%;
+            height: 42px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 0 #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 400;
+            color: #000;
+        }
+        .kb-key-empty {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        /* Floating Badge */
+        .floating-badge {
+            position: absolute;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 20;
+            border: 1px solid #f3f4f6;
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Blobs -->
+<div class="decorative-blob blob-1"></div>
+<div class="decorative-blob blob-2"></div>
+<!-- Main Content -->
+<div class="relative z-10 flex flex-1 w-full h-full p-16">
+<!-- Left Column: Text Content -->
+<div class="w-1/2 flex flex-col justify-center pr-12">
+<div class="mb-4">
+<span class="text-gray-400 font-bold tracking-widest text-sm uppercase">Step 01</span>
+</div>
+<h2 class="text-5xl font-bold text-gray-900 leading-tight mb-6">
+                Login Flow
+            </h2>
+<p class="text-xl text-gray-500 mb-12 max-w-lg">
+                Remove entry barriers with a phone-first approach that prioritizes speed and familiarity.
+            </p>
+<!-- Feature List -->
+<div class="space-y-4">
+<!-- Feature 1 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-mobile-screen-button"></i>
+</div>
+<div class="feature-content">
+<h3>Phone-first Architecture</h3>
+<p>Primary login method tailored for mobile users. No emails to mistype, just a simple 10-digit number.</p>
+</div>
+</div>
+<!-- Feature 2 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fas fa-bullhorn"></i>
+</div>
+<div class="feature-content">
+<h3>Custom Message Banner</h3>
+<p>Dedicated prime real estate for announcements, sales, or first-time user discounts to boost conversion.</p>
+</div>
+</div>
+<!-- Feature 3 -->
+<div class="feature-item">
+<div class="feature-icon-wrapper">
+<i class="fab fa-google"></i>
+</div>
+<div class="feature-content">
+<h3>Social Integration</h3>
+<p>One-tap login via Google or Facebook for users who prefer instant account linkage over manual entry.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Mockup -->
+<div class="w-1/2 flex items-center justify-center relative">
+<!-- Phone Mockup -->
+<div class="phone-mockup">
+<div class="phone-notch"></div>
+<div class="phone-screen">
+<!-- Status Bar -->
+<div class="ui-status-bar">
+<span>9:41</span>
+<div class="flex gap-1">
+<i class="fas fa-signal"></i>
+<i class="fas fa-wifi"></i>
+<i class="fas fa-battery-full"></i>
+</div>
+</div>
+<!-- Nav Bar (Minimal) -->
+<div class="ui-nav-bar">
+<i class="fas fa-arrow-left text-gray-400 text-lg"></i>
+</div>
+<!-- Promo Banner -->
+<div class="ui-banner">
+<i class="fas fa-tag"></i>
+<span>Get extra 10% off on your first order!</span>
+</div>
+<!-- Main Content -->
+<div class="ui-content">
+<h1 class="text-2xl font-bold text-gray-900 mb-2">Log in or Sign up</h1>
+<p class="text-sm text-gray-500">Enter your phone number to continue</p>
+<!-- Phone Input -->
+<div class="ui-input-group">
+<label class="text-xs font-semibold text-gray-700 block mb-2">Mobile Number</label>
+<div class="ui-input-box">
+<div class="ui-country-code">
+                                    🇺🇸 +1
+                                </div>
+<div class="ui-input">
+                                    (555) 867-53
+                                    <div class="ui-cursor"></div>
+</div>
+</div>
+</div>
+<!-- CTA Button -->
+<button class="ui-btn-primary">
+                                Get OTP
+                            </button>
+<!-- Divider -->
+<div class="ui-divider">
+<span>Or continue with</span>
+</div>
+<!-- Social Buttons -->
+<div class="ui-social-row">
+<button class="ui-social-btn">
+<i class="fab fa-google text-red-500"></i> Google
+                                </button>
+<button class="ui-social-btn">
+<i class="fab fa-facebook text-blue-600"></i> Facebook
+                                </button>
+</div>
+</div>
+<!-- Keyboard -->
+<div class="ui-keyboard">
+<div class="kb-row">
+<div class="kb-key">1</div>
+<div class="kb-key">2</div>
+<div class="kb-key">3</div>
+</div>
+<div class="kb-row">
+<div class="kb-key">4</div>
+<div class="kb-key">5</div>
+<div class="kb-key">6</div>
+</div>
+<div class="kb-row">
+<div class="kb-key">7</div>
+<div class="kb-key">8</div>
+<div class="kb-key">9</div>
+</div>
+<div class="kb-row">
+<div class="kb-key kb-key-empty"></div>
+<div class="kb-key">0</div>
+<div class="kb-key kb-key-empty"><i class="fas fa-backspace"></i></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Badge -->
+<div class="floating-badge" style="top: 25%; right: 10%;">
+<div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+<i class="fas fa-bolt"></i>
+</div>
+<div>
+<p class="text-xs text-gray-400 font-bold uppercase">Speed</p>
+<p class="text-sm font-bold text-gray-900">One-tap Entry</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

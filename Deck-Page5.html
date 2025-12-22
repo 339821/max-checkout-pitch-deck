@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Journey Map</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .decorative-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(0, 102, 255, 0.03);
+            top: -200px;
+            right: -200px;
+        }
+        
+        /* Timeline specific styles */
+        .timeline-container {
+            position: relative;
+            padding: 40px 0;
+            width: 100%;
+        }
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            right: 50px;
+            height: 4px;
+            background: #e5e7eb;
+            transform: translateY(-50%);
+            z-index: 0;
+            border-radius: 4px;
+        }
+        .timeline-progress {
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            width: calc(100% - 100px); /* Full width for linear flow */
+            height: 4px;
+            background: #0066FF; /* Blue accent */
+            transform: translateY(-50%);
+            z-index: 0;
+            border-radius: 4px;
+            opacity: 0.2; /* Subtle indication of path */
+        }
+        
+        .step-node {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 140px;
+        }
+        
+        .node-circle {
+            width: 64px;
+            height: 64px;
+            background: white;
+            border: 3px solid #0066FF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0066FF;
+            font-size: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .step-node:hover .node-circle {
+            background: #0066FF;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 102, 255, 0.3);
+        }
+        
+        .step-content {
+            text-align: center;
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #f3f4f6;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        .step-number {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        
+        .step-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0;
+        }
+
+        .kpi-badge {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 16px 24px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background Elements -->
+<div class="decorative-blob blob-1"></div>
+<!-- Main Content Wrapper -->
+<div class="relative z-10 flex flex-col w-full h-full p-16">
+<!-- Header -->
+<div class="text-center mb-12">
+<div class="inline-block mb-4">
+<span class="bg-blue-50 text-blue-600 text-sm font-bold px-3 py-1 rounded-full border border-blue-100 uppercase tracking-wider">
+                    Process Flow
+                </span>
+</div>
+<h2 class="text-4xl font-bold text-gray-900 tracking-tight mb-4">User Journey Map</h2>
+<p class="text-lg text-gray-500 max-w-2xl mx-auto">
+                A streamlined, linear path designed to move users from decision to confirmation with zero friction.
+            </p>
+</div>
+<!-- KPI Stats Row -->
+<div class="flex justify-center gap-8 mb-16">
+<div class="kpi-badge">
+<div class="kpi-icon bg-indigo-50 text-indigo-600">
+<i class="fas fa-list-ol"></i>
+</div>
+<div>
+<p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">Total Steps</p>
+<p class="text-2xl font-bold text-gray-900">6 Steps</p>
+</div>
+</div>
+<div class="kpi-badge">
+<div class="kpi-icon bg-green-50 text-green-600">
+<i class="fas fa-stopwatch"></i>
+</div>
+<div>
+<p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">Target Time</p>
+<p class="text-2xl font-bold text-gray-900">&lt; 80s</p>
+</div>
+</div>
+<div class="kpi-badge">
+<div class="kpi-icon bg-blue-50 text-blue-600">
+<i class="fas fa-arrow-right-long"></i>
+</div>
+<div>
+<p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">Flow Type</p>
+<p class="text-2xl font-bold text-gray-900">100% Linear</p>
+</div>
+</div>
+</div>
+<!-- Timeline Section -->
+<div class="flex-1 flex items-center justify-center w-full px-8">
+<div class="timeline-container">
+<!-- Lines -->
+<div class="timeline-line"></div>
+<!-- Optional: Dashed line animation or gradient could go here if CSS gradients were allowed, using solid for safety -->
+<!-- Steps Wrapper -->
+<div class="flex justify-between w-full relative z-10">
+<!-- Step 1 -->
+<div class="step-node group">
+<div class="node-circle bg-white group-hover:bg-blue-50">
+<i class="fas fa-shopping-bag"></i>
+</div>
+<div class="step-content">
+<p class="step-number">Step 01</p>
+<p class="step-title">Buy Now</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-node group">
+<div class="node-circle bg-white group-hover:bg-blue-50">
+<i class="fas fa-user-circle"></i>
+</div>
+<div class="step-content">
+<p class="step-number">Step 02</p>
+<p class="step-title">Login</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-node group">
+<div class="node-circle bg-white group-hover:bg-blue-50">
+<i class="fas fa-map-marker-alt"></i>
+</div>
+<div class="step-content">
+<p class="step-number">Step 03</p>
+<p class="step-title">Address</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-node group">
+<div class="node-circle bg-white group-hover:bg-blue-50">
+<i class="fas fa-key"></i>
+</div>
+<div class="step-content">
+<p class="step-number">Step 04</p>
+<p class="step-title">OTP</p>
+</div>
+</div>
+<!-- Step 5 -->
+<div class="step-node group">
+<div class="node-circle bg-white group-hover:bg-blue-50">
+<i class="fas fa-credit-card"></i>
+</div>
+<div class="step-content">
+<p class="step-number">Step 05</p>
+<p class="step-title">Payment</p>
+</div>
+</div>
+<!-- Step 6 -->
+<div class="step-node group">
+<div class="node-circle bg-white group-hover:bg-blue-50 border-green-500 text-green-500">
+<i class="fas fa-check"></i>
+</div>
+<div class="step-content border-green-100 bg-green-50">
+<p class="step-number text-green-600">Step 06</p>
+<p class="step-title text-green-800">Success</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Note -->
+<div class="mt-auto text-center">
+<p class="text-sm text-gray-400">
+<i class="fas fa-info-circle mr-2"></i>
+                Progress tracker is visible throughout the entire session to reduce abandonment anxiety.
+            </p>
+</div>
+</div>
+</div>
+</body>
+</html>

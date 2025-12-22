@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Problem: Checkout Friction</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Problem-specific styles */
+        .problem-point {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 20px;
+        }
+        .problem-point::before {
+            content: '×';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #ef4444; /* Red for problem */
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 28px;
+        }
+        /* Cluttered Phone Mockup */
+        .phone-mockup {
+            width: 300px;
+            height: 600px;
+            background: #ffffff;
+            border-radius: 40px;
+            border: 12px solid #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            /* Slightly tilted to the other side */
+            transform: rotate(3deg); 
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #1a1a1a;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 20;
+        }
+        .phone-screen {
+            height: 100%;
+            background: #f3f4f6;
+            padding: 40px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Hide overflow for cluttered look */
+        }
+        /* Cluttered UI Elements */
+        .clutter-header {
+            background: #1e3a8a;
+            color: white;
+            padding: 10px;
+            margin: -40px -16px 10px;
+            padding-top: 50px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .clutter-nav {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 8px;
+            margin: 0 -16px 10px;
+            display: flex;
+            justify-content: space-around;
+            font-size: 10px;
+            color: #6b7280;
+        }
+        .clutter-step-indicator {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+        .clutter-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d1d5db;
+        }
+        .clutter-dot.active {
+            background: #1e3a8a;
+        }
+        .clutter-form-group {
+            margin-bottom: 12px;
+        }
+        .clutter-label {
+            font-size: 10px;
+            color: #374151;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .clutter-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            background: white;
+        }
+        .clutter-input.error {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        .clutter-error-text {
+            color: #ef4444;
+            font-size: 9px;
+            margin-top: 2px;
+        }
+        .clutter-accordion {
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            background: white;
+        }
+        .clutter-accordion-header {
+            padding: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .clutter-banner {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            padding: 8px;
+            font-size: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.5;
+            z-index: 0;
+        }
+        .overlay-alert {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 80%;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            z-index: 30;
+        }
+        .overlay-alert h4 {
+            color: #ef4444;
+            font-size: 14px;
+            margin: 0 0 5px 0;
+        }
+        .overlay-alert p {
+            font-size: 10px;
+            color: #6b7280;
+            margin: 0 0 10px 0;
+        }
+        .overlay-btn {
+            background: #ef4444;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="bg-pattern"></div>
+<div class="relative z-10 flex flex-1 w-full h-full p-16">
+<!-- Left Column: Text Content -->
+<div class="w-1/2 flex flex-col justify-center pr-12">
+<div class="mb-2">
+<span class="text-red-500 font-bold tracking-wider text-sm uppercase">The Challenge</span>
+</div>
+<h2 class="text-5xl font-bold text-gray-900 leading-tight mb-8">
+                Checkout Friction<br/>
+<span class="text-red-500">Kills Conversions</span>
+</h2>
+<div class="space-y-2 text-gray-600">
+<div class="problem-point">
+<p class="font-semibold text-gray-800 text-lg">Too many steps &amp; unclear progress</p>
+<p class="text-sm mt-1">Users get lost in multi-page flows without knowing how much is left, leading to abandonment.</p>
+</div>
+<div class="problem-point">
+<p class="font-semibold text-gray-800 text-lg">Account-first barriers</p>
+<p class="text-sm mt-1">Forced registration and slow OTP delivery block entry at the very first step.</p>
+</div>
+<div class="problem-point">
+<p class="font-semibold text-gray-800 text-lg">Tedious data entry</p>
+<p class="text-sm mt-1">Manual address typing, confusing PIN code logic, and lack of smart defaults create fatigue.</p>
+</div>
+<div class="problem-point">
+<p class="font-semibold text-gray-800 text-lg">Poor mobile ergonomics</p>
+<p class="text-sm mt-1">Tiny touch targets, incorrect keyboard types, and non-responsive layouts frustrate mobile users.</p>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-gray-200">
+<div class="flex items-center gap-4">
+<div class="bg-red-50 rounded-lg p-3">
+<i class="fas fa-arrow-trend-down text-red-500 text-xl"></i>
+</div>
+<div>
+<p class="text-sm text-gray-500 font-semibold uppercase">Result</p>
+<p class="text-xl font-bold text-gray-900">70% Cart Abandonment Rate</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Cluttered Visual -->
+<div class="w-1/2 flex items-center justify-center relative">
+<!-- Decorative circle behind -->
+<div class="absolute w-80 h-80 bg-red-100 rounded-full opacity-50 blur-3xl" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+<div class="phone-mockup">
+<div class="phone-notch"></div>
+<div class="phone-screen">
+<!-- Cluttered Header -->
+<div class="clutter-header">
+<span>MY STORE</span>
+<i class="fas fa-bars"></i>
+</div>
+<!-- Distracting Nav -->
+<div class="clutter-nav">
+<span>Home</span>
+<span>Shop</span>
+<span>Blog</span>
+<span>Contact</span>
+</div>
+<!-- Tiny steps -->
+<div class="clutter-step-indicator">
+<div class="clutter-dot active"></div>
+<div class="clutter-dot"></div>
+<div class="clutter-dot"></div>
+<div class="clutter-dot"></div>
+<div class="clutter-dot"></div>
+</div>
+<!-- Annoying Banner -->
+<div class="clutter-banner">
+<i class="fas fa-exclamation-triangle mr-1"></i> Complete profile to get 5% off!
+                    </div>
+<!-- Complex Form -->
+<div class="overflow-y-hidden relative h-full">
+<div class="clutter-form-group">
+<label class="clutter-label">Email Address *</label>
+<input class="clutter-input error" type="text" value="user@domain"/>
+<p class="clutter-error-text">Invalid email format</p>
+</div>
+<div class="clutter-form-group">
+<label class="clutter-label">Password *</label>
+<input class="clutter-input" placeholder="••••••••" type="password"/>
+</div>
+<div class="clutter-accordion">
+<div class="clutter-accordion-header">
+<span>Shipping Address</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+</div>
+<div class="clutter-accordion">
+<div class="clutter-accordion-header">
+<span>Billing Address</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+</div>
+<!-- Buttons at bottom (simulated clutter) -->
+<div class="mt-4 flex gap-2">
+<button class="bg-gray-200 text-gray-700 py-2 px-4 rounded text-xs w-1/2">Back</button>
+<button class="bg-blue-600 text-white py-2 px-4 rounded text-xs w-1/2">Next Step</button>
+</div>
+<!-- Footer distractions -->
+<div class="mt-6 text-center text-[8px] text-gray-400">
+<p>Privacy Policy | Terms of Service | Returns</p>
+<p class="mt-1">© 2023 Company Name. All rights reserved.</p>
+</div>
+</div>
+<!-- Overlay Alert simulating interruption -->
+<div class="overlay-alert animate-bounce">
+<h4>Session Timeout</h4>
+<p>Please log in again to continue your purchase.</p>
+<span class="overlay-btn">Log In</span>
+</div>
+</div>
+</div>
+<!-- Floating "pain point" tags -->
+<div class="absolute top-24 left-10 bg-white border border-red-200 text-red-600 px-3 py-1 rounded-full text-xs font-bold shadow-sm transform -rotate-12">
+<i class="fas fa-clock mr-1"></i> Slow Loading
+            </div>
+<div class="absolute bottom-32 right-10 bg-white border border-red-200 text-red-600 px-3 py-1 rounded-full text-xs font-bold shadow-sm transform rotate-6">
+<i class="fas fa-bug mr-1"></i> Errors
+            </div>
+<div class="absolute top-1/2 right-0 bg-white border border-red-200 text-red-600 px-3 py-1 rounded-full text-xs font-bold shadow-sm transform rotate-3 translate-x-4">
+<i class="fas fa-hand-pointer mr-1"></i> Tiny Buttons
+            </div>
+</div>
+</div>
+</div>
+</body>
+</html>
